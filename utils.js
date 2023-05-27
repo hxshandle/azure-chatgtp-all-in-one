@@ -54,7 +54,6 @@ exports.queryGpt4 = async (messages) => {
     top_p: 0.95,
     stop: 'null',
   }
-  console.log({data})
   const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
