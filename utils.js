@@ -45,15 +45,16 @@ async function getToken() {
 exports.queryGpt4 = async (messages) => {
   const token = await getToken()
   const data = {
-    deployment_id: 'gpt-4',
+    deployment_id: 'gpt-4-32k',
     messages,
-    max_tokens: 4000,
+    max_tokens: 30000,
     temperature: 0.7,
     frequency_penalty: 0,
     presence_penalty: 0,
     top_p: 0.95,
     stop: 'null',
   }
+  console.log({data})
   const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
