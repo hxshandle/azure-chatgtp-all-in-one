@@ -3,7 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
 const app = express()
-const { queryGpt4 } = require('./utils')
+const { queryChatGpt } = require('./utils')
 const c = require('./key.json')
 
 dotenv.config()
@@ -44,8 +44,9 @@ app.post('/v1/chat/completions', async (req, res) => {
   // here add a auth check
   
 
-  const { messages } = req.body
-  const ret = await queryGpt4(messages)
+  const { messages, model } = req.body
+  let temperature = model.temperature || 0.7
+  const ret = await queryChatGpt(messages, model, temperature)
   res.send(ret)
   // res.send('hello');
 })

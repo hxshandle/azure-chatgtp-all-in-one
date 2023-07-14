@@ -42,13 +42,13 @@ async function getToken() {
   return token
 }
 
-exports.queryGpt4 = async (messages) => {
+exports.queryChatGpt = async (messages, model, temperature) => {
   const token = await getToken()
   const data = {
-    deployment_id: 'gpt-4-32k',
+    deployment_id: model,
     messages,
-    max_tokens: 30000,
-    temperature: 0.7,
+    // max_tokens: 30000,
+    temperature: temperature,
     frequency_penalty: 0,
     presence_penalty: 0,
     top_p: 0.95,
