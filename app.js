@@ -14,7 +14,7 @@ app.use(express.json())
 
 const checkAuthorization = (req, res, next) => {
   // 检查 Authorization 值
-  /*
+  
   const authorization = req.headers.authorization;
 
   if (!authorization) {
@@ -28,7 +28,7 @@ const checkAuthorization = (req, res, next) => {
   if (token !== process.env.sectAccessKey) {
     return res.status(403).json({ error: 'Invalid authorization token' });
   }
-*/
+
   // 继续处理下一个中间件或路由处理程序
   next();
 };
