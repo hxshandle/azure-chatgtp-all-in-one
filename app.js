@@ -3,7 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
 const app = express()
-const { queryChatGpt } = require('./utils')
+const { queryChatGpt, queryChatGptStream } = require('./utils')
 const c = require('./key.json')
 
 dotenv.config()
@@ -14,6 +14,7 @@ app.use(express.json())
 
 const checkAuthorization = (req, res, next) => {
   // 检查 Authorization 值
+  /*
   const authorization = req.headers.authorization;
 
   if (!authorization) {
@@ -27,7 +28,7 @@ const checkAuthorization = (req, res, next) => {
   if (token !== process.env.sectAccessKey) {
     return res.status(403).json({ error: 'Invalid authorization token' });
   }
-
+*/
   // 继续处理下一个中间件或路由处理程序
   next();
 };
@@ -46,9 +47,19 @@ app.post('/v1/chat/completions', async (req, res) => {
 
   const { messages, model } = req.body
   let temperature = model.temperature || 0.7
-  const ret = await queryChatGpt(messages, model, temperature)
-  res.send(ret)
-  // res.send('hello');
+
+  // const ret = await queryChatGpt(messages, model, temperature)
+  // res.send(ret)
+
+  // use stream
+  const headers = {
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'no-cache'
+  };
+  res.writeHead(200, headers);
+  await queryChatGptStream(messages, model, temperature, res)
+
 })
 
 // create a get route to return the keys from the keys.json file

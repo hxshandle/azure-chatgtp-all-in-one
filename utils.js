@@ -62,3 +62,39 @@ exports.queryChatGpt = async (messages, model, temperature) => {
 
   return response.data
 }
+
+
+exports.queryChatGptStream = async (messages, model, temperature, res) => {
+  const token = await getToken()
+  const data = {
+    deployment_id: model,
+    messages,
+    temperature: temperature,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    top_p: 0.95,
+    stream: true,
+    stop: 'null',
+  }
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  }
+  const options = {
+    method: 'POST',
+    url: `${svcUrl}/api/v1/completions`,
+    headers: headers,
+    data: data,
+    responseType: 'stream' 
+  }
+  axios(options).then((response) => {
+    response.data.pipe(res);
+    // response.data.on('data', (chunk) => {
+    //   res.write(chunk)
+    // });
+  
+    // response.data.on('end', () => {
+    //   res.end();
+    // });
+  });
+}
